@@ -12,3 +12,6 @@ run_once:
 
 stop:
 	docker stop al_svc_lookyloo && docker rm al_svc_lookyloo
+
+enter:
+	docker exec -it al_svc_lookyloo /bin/bash
