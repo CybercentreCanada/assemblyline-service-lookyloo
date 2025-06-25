@@ -50,6 +50,9 @@ RUN chmod +x /opt/al_service/lookyloo/entrypoint.sh
 
 RUN chown -R assemblyline:assemblyline /opt/al_service
 
+# Clean up unnecessary files
+RUN apt-get clean && apt-get autoremove -y 
+
 # Set the user to assemblyline for running the service
 USER assemblyline
 
