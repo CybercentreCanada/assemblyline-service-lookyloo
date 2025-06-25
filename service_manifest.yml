@@ -22,6 +22,20 @@ timeout: 120
 enabled: true
 is_external: true
 
+config:
+  proxies:
+    no_proxy:
+    localhost_proxy:
+      socks5: "socks5://127.0.0.1:1080"
+  default_browser_settings:
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
+
+submission_params:
+  - default: "no_proxy"
+    name: "proxy"
+    type: "list"
+    value: "no_proxy"
+    list: ["no_proxy", "localhost_proxy"]
 
 # Docker configuration block which defines:
 #  - the name of the docker container that will be created
