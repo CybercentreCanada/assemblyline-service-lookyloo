@@ -39,3 +39,9 @@ Warning: The test data is not copied on every `run_once` but is copied on build 
 - Add all available artifacts
 - Upload to docker hub/ghcr
 - Add browser settings (user agent etc.)
+
+## Acknowledgements/Collaborators
+
+- [Government of Yukon/Thomas Dang](https://github.com/litobro)
+- [CIRCL/Raphael Vinot](https://github.com/Rafiot)
+- [CCCS Assemblyline Team](https://github.com/cybercentrecanada)
