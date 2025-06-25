@@ -28,8 +28,15 @@ class LookyLoo(ServiceBase):
             
         data.pop("uri")
         
+        capture_settings = {
+            'quiet': True,
+            'url': request.task.fileinfo.uri_info.uri,
+            'proxy': data.get('proxy', None),
+        }
+        self.log.info(f"Capture settings: {capture_settings}")
+        
         # Enqueue the URL for processing
-        uuid = self.lookyloo.enqueue(url=request.task.fileinfo.uri_info.uri, quiet=True)
+        uuid = self.lookyloo.submit(**capture_settings)
         self.log.info(f"Enqueued URL {request.task.fileinfo.uri_info.uri} with UUID {uuid}")
         
         # Wait for the capture to complete
@@ -72,9 +79,4 @@ class LookyLoo(ServiceBase):
                 for key, value in cookie.items():
                     cookies_section.set_item(key, value)
                     
-                request.result.add_section(cookies_section)
-        
-
-        
-            
-        
+                request.result.add_section(cookies_section)            
