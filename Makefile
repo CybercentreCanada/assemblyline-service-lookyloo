@@ -1,17 +1,26 @@
-# Makefile for Lookyloo Service
+ifndef VERSION
+$(error VERSION is undefined)
+endif
 
-.PHONY: start run_once stop
+TAG?=latest
+ORG?=cccs
 
-start:
-	docker build -t assemblyline-service-lookyloo . && \
-	docker run --name al_svc_lookyloo -p 5100:5100 assemblyline-service-lookyloo
+ifneq ($(ORG)x, x)
+ORG:=$(ORG)/
+endif
+ifneq ($(REGISTRY)x, x)
+ORG:=$(REGISTRY)/
+endif
 
-run_once:
-	docker exec -it al_svc_lookyloo python -m assemblyline_v4_service.dev.run_service_once lookyloo.lookyloo.LookyLoo test.yml && \
-	docker exec -it al_svc_lookyloo cat test.yml_lookyloo/result.json
+.PHONY: default
+default: build
 
-stop:
-	docker stop al_svc_lookyloo && docker rm al_svc_lookyloo
-
-enter:
-	docker exec -it al_svc_lookyloo /bin/bash
+.PHONY: build
+build:
+	docker build \
+		--pull \
+		--build-arg version=$(VERSION) \
+		--build-arg branch=stable \
+		-t $(REGISTRY)$(ORG)assemblyline-service-lookyloo:$(TAG)\
+		-f ./Dockerfile \
+		.

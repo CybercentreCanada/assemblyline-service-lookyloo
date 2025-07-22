@@ -1,0 +1,5 @@
+git
+build-essential
+tcl
+# Lookyloo/playwright normally needs ffmpeg, but it's heavy and looks to work without!
+# ffmpeg

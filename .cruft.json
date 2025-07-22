@@ -1,0 +1,23 @@
+{
+  "template": "https://github.com/CybercentreCanada/assemblyline-service-template.git",
+  "commit": "c60a8ed86819416a005aeceec3c03b0e889a4ba3",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "service_name": "lookyloo",
+      "__svc_name": "lookyloo",
+      "__repository": "assemblyline-service-lookyloo",
+      "__pkg_name": "lookyloo",
+      "class_name": "Lookyloo",
+      "short_description": "This Assemblyline service extracts artifacts and captures from potentially malicious URLs using Lookyloo.",
+      "short_description_fr": "Ce service d'Assemblyline extrait les différents éléments et capture les informations des URLs potentiellement malicieuses en utilisant Lookyloo.",
+      "stage": "CORE",
+      "category": "Internet Connected",
+      "org_name_full": "CybercentreCanada",
+      "org_name_short": "cccs",
+      "license": "mit",
+      "_template": "https://github.com/CybercentreCanada/assemblyline-service-template.git"
+    }
+  },
+  "directory": null
+}

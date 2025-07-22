@@ -1,65 +1,35 @@
-FROM cccs/assemblyline-v4-service-base:stable
+ARG branch=latest
+FROM cccs/assemblyline-v4-service-base:$branch
 
-ENV SERVICE_PATH=lookyloo.lookyloo.LookyLoo 
+# Python path to the service class from your service directory
+ENV SERVICE_PATH=lookyloo.lookyloo.Lookyloo
 
-# Build dependencies
+# Install apt dependencies
 USER root
+COPY pkglist.txt /tmp/setup/
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    supervisor git curl build-essential tcl python3 ffmpeg python3-dev
+    $(grep -vE "^\s*(#|$)" /tmp/setup/pkglist.txt | tr "\n" " ") && \
+    rm -rf /tmp/setup/pkglist.txt /var/lib/apt/lists/*
 
-RUN pip3 install poetry
-
-# Begin setting up
-RUN mkdir -p /opt/al_service/app
-
-WORKDIR /opt/al_service/app
-
-# Install valkey
-RUN git clone https://github.com/valkey-io/valkey
-WORKDIR /opt/al_service/app/valkey
-RUN git checkout 8.0
-RUN make
-
-# Get latest version of Lookyloo
-WORKDIR /opt/al_service/app
-RUN git clone https://github.com/Lookyloo/lookyloo.git
-
-WORKDIR /opt/al_service/app/lookyloo
-
-RUN mkdir -p cache user_agents scraped logs
-
-RUN poetry install
-RUN echo LOOKYLOO_HOME="'`pwd`'" > .env
-RUN poetry run playwright install-deps
-RUN chown -R assemblyline:assemblyline /opt/al_service
-
-# Install the Lookyloo dependencies
+# Install python dependencies
 USER assemblyline
+COPY requirements.txt requirements.txt
+RUN pip install \
+    --no-cache-dir \
+    --user \
+    --requirement requirements.txt && \
+    rm -rf ~/.cache/pip
 
-WORKDIR /opt/al_service/app/lookyloo
-RUN poetry install
-RUN poetry run update --yes
-
-# Copy the service files
-USER root
-
-WORKDIR /opt/al_service/
-COPY . .
-RUN chmod +x /opt/al_service/lookyloo/entrypoint.sh
-
-RUN chown -R assemblyline:assemblyline /opt/al_service
-
-# Clean up unnecessary files
-RUN apt-get clean && apt-get autoremove -y 
-
-# Set the user to assemblyline for running the service
-USER assemblyline
-
+# Copy service code
 WORKDIR /opt/al_service
+COPY . .
 
-# Install Python dependencies
-RUN pip3 install --no-cache-dir --user --requirement requirements.txt && rm -rf ~/.cache/pip
+# Patch version in manifest
+ARG version=1.0.0.dev1
+USER root
+RUN sed -i -e "s/\$SERVICE_TAG/$version/g" service_manifest.yml
 
-# Set the entrypoint script
-ENTRYPOINT ["/opt/al_service/lookyloo/entrypoint.sh"]
+# Switch to assemblyline user
+USER assemblyline
