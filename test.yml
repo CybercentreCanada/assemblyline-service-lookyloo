@@ -1,7 +1,0 @@
-# Assemblyline URI file
-uri: https://yukon.ca
-# Optionally, a SOCKS5 proxy URL to use for the request
-# You can test this by ssh'ing into the docker container and running:
-#     ssh -D 1080 -N -f user@host
-# This will create a SOCKS5 proxy on localhost:1080
-# proxy: socks5://localhost:1080
