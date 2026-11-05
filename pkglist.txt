@@ -3,3 +3,5 @@ build-essential
 tcl
 # Lookyloo/playwright normally needs ffmpeg, but it's heavy and looks to work without!
 # ffmpeg
+# Lookyloo needs ssdeep through pydeep2, and it's not available as wheels for python 3.14
+libfuzzy-dev
